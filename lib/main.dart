@@ -1,4 +1,5 @@
 import 'package:bin_band_group/screens/login_screen.dart';
+import 'package:bin_band_group/screens/schedule_pickup_screen%20.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LoginScreen(),
+      // home: LoginScreen(),
+      home: SchedulePickupScreen(),
     );
   }
 }
