@@ -1,5 +1,6 @@
-import 'package:bin_band_group/sceens/home_sceen.dart';
+// import 'package:bin_band_group/sceens/redeem_points_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:bin_band_group/sceens/home_sceen.dart';
 
 void main() {
   runApp(const MyApp());
