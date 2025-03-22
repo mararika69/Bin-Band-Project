@@ -20,7 +20,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
   List<double> garbageWeights = [2.6, 1.4, 5.4, 0.8];
 
   int selectedDateIndex = 0;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,48 +38,54 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: List.generate(6, (index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedDateIndex = index; // Update the selected index
-        });
-      },
-      child: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: selectedDateIndex == index
-              ? Colors.blue[300]
-              : Colors.grey[200], // Highlight selected date
-        ),
-        child: Column(
-          children: [
-            Text(
-              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][index],
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: selectedDateIndex == index
-                    ? Colors.white
-                    : Colors.black,
-              ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(6, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDateIndex = index; // Update the selected index
+                    });
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 80,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color:
+                          selectedDateIndex == index
+                              ? Colors.blue[200]
+                              : Colors.white, // Highlight selected date
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][index],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color:
+                                selectedDateIndex == index
+                                    ? Colors.white
+                                    : Colors.black,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          ['16', '17', '18', '19', '20', '21'][index],
+                          style: TextStyle(
+                            color:
+                                selectedDateIndex == index
+                                    ? Colors.white
+                                    : Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
-            SizedBox(height: 4),
-            Text(
-              ['16', '17', '18', '19', '20', '21'][index],
-              style: TextStyle(
-                color: selectedDateIndex == index
-                    ? Colors.white
-                    : Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }),
-),
             SizedBox(height: 20),
             Row(
               children: [
@@ -91,7 +97,10 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
                     });
                   },
                 ),
-                Text('Repeat Weekly', style: TextStyle(fontSize: 16, fontWeight:FontWeight.bold)),
+                Text(
+                  'Repeat Weekly',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
                 Spacer(),
                 DropdownButton<String>(
                   value: dropdownValue,
@@ -127,77 +136,84 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
               ),
               child: Column(
                 children: List.generate(garbageTypes.length, (index) {
-                 return Padding(
-  padding: const EdgeInsets.symmetric(vertical: 2.0),
-  child: Container(
-    height: 70,
-    decoration: BoxDecoration(
-      color: const Color.fromARGB(255, 255, 255, 255),
-      borderRadius: BorderRadius.circular(15),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10), // Add left margin
-          child: Row(
-            children: [
-              Checkbox(
-                value: garbageChecked[index],
-                onChanged: (value) {
-                  setState(() {
-                    garbageChecked[index] = value!;
-                  });
-                },
-              ),
-              Icon(
-                Icons.recycling,
-                color: const Color.fromARGB(255, 28, 106, 34),
-              ),
-              SizedBox(width: 8),
-              Text(
-                garbageTypes[index],
-                style: TextStyle(fontSize: 18),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 10), // Add right margin
-          child: Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.remove_circle_outline, size: 20),
-                onPressed: () {
-                  setState(() {
-                    if (garbageWeights[index] > 0.1) {
-                      garbageWeights[index] -= 0.1;
-                    }
-                  });
-                },
-              ),
-              Text(
-                '${garbageWeights[index].toStringAsFixed(1)} Kg',
-                style: TextStyle(fontSize: 16),
-              ),
-              IconButton(
-                icon: Icon(Icons.add_circle_outline, size: 20),
-                onPressed: () {
-                  setState(() {
-                    garbageWeights[index] += 0.1;
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  ),
-);
-
-
-
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Container(
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                            ), // Add left margin
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: garbageChecked[index],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      garbageChecked[index] = value!;
+                                    });
+                                  },
+                                ),
+                                Icon(
+                                  Icons.recycling,
+                                  color: const Color.fromARGB(255, 28, 106, 34),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  garbageTypes[index],
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              right: 10,
+                            ), // Add right margin
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.remove_circle_outline,
+                                    size: 20,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (garbageWeights[index] > 0.1) {
+                                        garbageWeights[index] -= 0.1;
+                                      }
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  '${garbageWeights[index].toStringAsFixed(1)} Kg',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.add_circle_outline,
+                                    size: 20,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      garbageWeights[index] += 0.1;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 }),
               ),
             ),
