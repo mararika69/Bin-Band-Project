@@ -1,253 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  Future<List<dynamic>> fetchRecentActivity() async {
+    final response = await http.get(
+      Uri.parse('https://api.example.com/recent-activity'),
+      headers: {
+        'Authorization':
+            'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvcGhlYWtAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6InNvcGhlYWsiLCJzdWIiOiJhNjM0ZDBiMy02YzIzLTQ4ZGEtOTdhNy01ZTU4MTIxYzYyN2YiLCJpZCI6ImE2MzRkMGIzLTZjMjMtNDhkYS05N2E3LTVlNTgxMjFjNjI3ZiIsIm5iZiI6MTc0MjYyNzQ4MywiZXhwIjoxNzQzMjMyMjgzLCJpYXQiOjE3NDI2Mjc0ODMsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTI0NiIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTI0NiJ9.FaV-cWHryyLE_r9QJ47TGeQekrrN2gSC8tNR46p1ctRrnvlmkCVQ-HjcMwJUd5iQA85DPjMDUFNLGALgFhvYOA',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load recent activity');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: AppBar(
+        title: Text("Recent Activity"),
+        backgroundColor: Colors.green,
+      ),
+      body: FutureBuilder<List<dynamic>>(
+        future: fetchRecentActivity(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No recent activity found"));
+          } else {
+            return ListView.builder(
+              padding: EdgeInsets.all(12),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return activityCard(snapshot.data![index]);
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget activityCard(dynamic activity) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        height: 80,
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: AspectRatio(
-                aspectRatio: 1.5,
-                child: Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: LineChart(
-                    LineChartData(
-                      gridData: FlGridData(show: true),
-                      titlesData: FlTitlesData(
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: true, interval: 1),
-                        ),
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: true, interval: 1),
-                        ),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                      ),
-                      borderData: FlBorderData(show: true),
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: [
-                            FlSpot(0, 1),
-                            FlSpot(1, 3),
-                            FlSpot(2, 2),
-                            FlSpot(3, 5),
-                            FlSpot(4, 4),
-                            FlSpot(5, 6),
-                            FlSpot(6, 8),
-                          ],
-                          isCurved: true,
-                          color: Colors.blue,
-                          barWidth: 3,
-                          isStrokeCapRound: true,
-                          belowBarData: BarAreaData(
-                            show: true,
-                            color: const Color.fromARGB(
-                              255,
-                              49,
-                              201,
-                              112,
-                            ).withOpacity(0.3),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xFFC2F8D4),
+              ),
+              child: Center(
+                child: Icon(Icons.recycling, size: 24, color: Colors.green),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Text(
-                "Quick Actions",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 120,
-                  width: 150,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color(0xFFC2F8D4),
-                    border: Border.all(
-                      color: const Color(0xFF1B5E1F),
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.calendar_month_outlined,
-                        size: 25,
-                        color: Color.fromARGB(255, 43, 109, 45),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "Schedule",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Text("Pickup button"),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 38),
-
-                Container(
-                  height: 120,
-                  width: 150,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color(0xFFFFEFBC),
-                    border: Border.all(
-                      color: const Color(0xFFFFB587),
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.wallet_giftcard,
-                        size: 25,
-                        color: Color.fromARGB(255, 43, 109, 45),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "Redeem",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Text("Points button"),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Recent Activity",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
                   Text(
-                    "See all",
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                    activity['title'],
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    "${activity['estimateWeight']} kg",
+                    style: TextStyle(fontSize: 12, color: Colors.black),
                   ),
                 ],
               ),
             ),
-
-            Center(
-              child: Container(
-                height: 80,
-                width: 347,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "+ ${activity['points']} Points",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xFFC2F8D4),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.recycling,
-                          size: 24,
-                          color: Colors.green,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Plastic Collection",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "3.5 kg",
-                            style: TextStyle(fontSize: 12, color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "+ 7 Points",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "2 hours ago",
-                          style: TextStyle(fontSize: 12, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
+                SizedBox(height: 5),
+                Text(
+                  activity['date'],
+                  style: TextStyle(fontSize: 12, color: Colors.black),
                 ),
-              ),
+              ],
             ),
-
-            const SizedBox(height: 20),
           ],
         ),
       ),
