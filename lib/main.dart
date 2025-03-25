@@ -1,9 +1,11 @@
+
 import 'package:bin_band_group/bloc/user_bloc.dart';
 import 'package:bin_band_group/sceens/home_sceen.dart';
-import 'package:bin_band_group/sceens/login_screen.dart';
-import 'package:bin_band_group/services/storage_service.dart';
+import 'package:bin_band_group/screens/login_screen.dart';
+import 'package:bin_band_group/screens/navigation_bottom_screen.dart';
+import 'package:bin_band_group/screens/schedule_pickup_screen%20.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bin_band_group/services/storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
       ),
+
+      home: const HomeScreen(),
     );
   }
 }
