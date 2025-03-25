@@ -1,9 +1,11 @@
 
+
 import 'package:bin_band_group/sceens/home_sceen.dart';
 import 'package:bin_band_group/screens/login_screen.dart';
 import 'package:bin_band_group/screens/navigation_bottom_screen.dart';
 import 'package:bin_band_group/screens/schedule_pickup_screen%20.dart';
 import 'package:flutter/material.dart';
+import 'package:bin_band_group/sceens/home_sceen.dart';
 
 void main() {
   runApp(const MyApp());

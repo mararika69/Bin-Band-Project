@@ -7,12 +7,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Line Chart
             Center(
               child: AspectRatio(
                 aspectRatio: 1.5,
@@ -28,12 +26,12 @@ class HomeScreen extends StatelessWidget {
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(showTitles: true, interval: 1),
                         ),
-                          topTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false), // Hide top
-                      ),
-                      rightTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false), // Hide right
-                      ),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
                       ),
                       borderData: FlBorderData(show: true),
                       lineBarsData: [
@@ -53,8 +51,12 @@ class HomeScreen extends StatelessWidget {
                           isStrokeCapRound: true,
                           belowBarData: BarAreaData(
                             show: true,
-                            color: const Color.fromARGB(255, 49, 201, 112)
-                                .withOpacity(0.3),
+                            color: const Color.fromARGB(
+                              255,
+                              49,
+                              201,
+                              112,
+                            ).withOpacity(0.3),
                           ),
                         ),
                       ],
@@ -64,8 +66,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-
-            // Quick Actions Section
             Padding(
               padding: const EdgeInsets.all(25.0),
               child: Text(
@@ -76,7 +76,6 @@ class HomeScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // First Container
                 Container(
                   height: 120,
                   width: 150,
@@ -113,7 +112,6 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 38),
 
-                // Second Container
                 Container(
                   height: 120,
                   width: 150,
@@ -150,7 +148,6 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
 
-            // Recent Activity Section
             Padding(
               padding: const EdgeInsets.all(25),
               child: Row(
@@ -168,7 +165,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Recent Activity Card
             Center(
               child: Container(
                 height: 80,
@@ -189,7 +185,6 @@ class HomeScreen extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Icon inside green rounded box
                     Container(
                       height: 50,
                       width: 50,
@@ -205,9 +200,8 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12), // Space between icon and text
+                    const SizedBox(width: 12),
 
-                    // Column for Activity Name & Amount
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +223,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // Column for Points & Time
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.center,
