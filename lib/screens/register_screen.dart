@@ -1,5 +1,5 @@
 import 'package:bin_band_group/controllers/user_controller.dart';
-import 'package:bin_band_group/sceens/login_screen.dart';
+import 'package:bin_band_group/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
