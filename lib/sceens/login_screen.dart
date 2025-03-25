@@ -1,6 +1,6 @@
 import 'package:bin_band_group/bloc/user_bloc.dart';
 import 'package:bin_band_group/controllers/user_controller.dart';
-import 'package:bin_band_group/sceens/activity_screen.dart';
+// import 'package:bin_band_group/sceens/activity_screen.dart';
 import 'package:bin_band_group/sceens/home_sceen.dart';
 // import 'package:bin_band_group/sceens/home_sceen.dart';
 import 'package:bin_band_group/sceens/register_screen.dart';
