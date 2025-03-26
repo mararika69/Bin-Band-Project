@@ -34,12 +34,6 @@ class MyApp extends StatelessWidget {
         // Show HomeScreen if logged in, otherwise show LoginScreen
         home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
       ),
-<<<<<<< HEAD
-      // home: LoginScreen(),
-      home: SchedulePickupScreen(),
-      // home: NavigationBottomScreen(),
-=======
->>>>>>> origin/main
     );
   }
 }
