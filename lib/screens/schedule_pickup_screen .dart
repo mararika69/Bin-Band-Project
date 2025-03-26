@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:lucide_icons/lucide_icons.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SchedulePickupScreen extends StatefulWidget {
   @override
@@ -9,17 +10,60 @@ class SchedulePickupScreen extends StatefulWidget {
 class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
   bool repeatWeekly = false;
   String dropdownValue = '1 Week';
-  final List<String> garbageTypes = [
-    'Plastic Garbage',
-    'Metal Garbage',
-    'Glass Garbage',
-    'Paper Garbage',
-  ];
+  final List<String> garbageTypes = ['Plastic', 'Metal', 'Glass', 'Paper'];
   List<bool> garbageChecked = [false, false, false, false];
-
   List<double> garbageWeights = [2.6, 1.4, 5.4, 0.8];
-
   int selectedDateIndex = 0;
+  String address = "GVVM+V26, St. 114, Phnom Penh";
+
+  Future<void> submitPickup() async {
+    List<Map<String, dynamic>> selectedGarbage = [];
+    for (int i = 0; i < garbageTypes.length; i++) {
+      if (garbageChecked[i]) {
+        selectedGarbage.add({
+          "type": garbageTypes[i],
+          "weight": garbageWeights[i]
+        });
+      }
+    }
+
+    if (selectedGarbage.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select at least one garbage type."))
+      );
+      return;
+    }
+
+    final pickupData = {
+      "date": ['2025-03-25', '2025-03-26', '2025-03-27', '2025-03-28', '2025-03-29', '2025-03-30'][selectedDateIndex],
+      "repeatWeekly": repeatWeekly,
+      "interval": dropdownValue,
+      "garbage": selectedGarbage,
+      "address": address
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse("https://your-api-endpoint.com/schedule-pickup"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(pickupData),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Pickup scheduled successfully!"))
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to schedule pickup. Try again!"))
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e"))
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,8 +261,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
                 }),
               ),
             ),
-
-            SizedBox(height: 30),
+            SizedBox(height: 0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -253,15 +296,14 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
                     color: Color.fromARGB(255, 28, 106, 34), // Green color
                   ),
                 ),
-
                 subtitle: Text(
-                  'GVVM+V26, St. 114, Phnom Penh\nGVVM+V26, St. 114, Phnom Penh',
+                  address,
                 ),
               ),
             ),
-            Spacer(),
+            SizedBox(height: 50),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: submitPickup,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 28, 106, 34),
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
