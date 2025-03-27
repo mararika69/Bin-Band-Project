@@ -216,7 +216,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
               onChanged: (value) {
                 setState(() {
                   estimatedWeight = value;
-                  showErrors = false; // Hide errors when user enters weight
+                  showErrors = false;
                 });
               },
             ),
@@ -261,7 +261,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
                   ),
                   SizedBox(
                     width: 8,
-                  ), // Add some space between the icon and text
+                  ),
                   Text(
                     "New Pickup",
                     style: TextStyle(
