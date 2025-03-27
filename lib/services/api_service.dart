@@ -106,7 +106,6 @@ class ApiService {
     if (token == null) {
       throw Exception('Token not found');
     }
-
     // Create the request body
     final requestBody = {
       "userId": userId,
@@ -115,7 +114,6 @@ class ApiService {
       "estimateWeight": estimateWeight,
       "recurring": recurring,
     };
-
     final response = await http.post(
       Uri.parse('$baseUrl/api/pickup/schedule?limit=$limit'),
       headers: {
