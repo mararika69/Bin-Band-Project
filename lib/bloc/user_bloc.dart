@@ -34,3 +34,4 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
   }
 }
+

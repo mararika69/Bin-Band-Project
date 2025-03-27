@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         // Show HomeScreen if logged in, otherwise show LoginScreen
-        home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
-        // home: SchedulePickupScreen(),
+        home: isLoggedIn ? HomeScreen() : const LoginScreen(),
+        
       ),
     );
   }

@@ -3,6 +3,8 @@ class Activity {
   final String userId;
   final String? user;
   final String title;
+  final String points;
+  final double estimateWeight;
   final String description;
   final DateTime date;
   final DateTime createdAt;
@@ -12,6 +14,8 @@ class Activity {
     required this.userId,
     this.user,
     required this.title,
+    required this.points,
+    required this.estimateWeight,
     required this.description,
     required this.date,
     required this.createdAt,
@@ -23,6 +27,8 @@ class Activity {
       userId: json['userId'],
       user: json['user'],
       title: json['title'],
+      points: json['points'],
+      estimateWeight: json['estimateWeight'],
       description: json['description'],
       date: DateTime.parse(json['date']),
       createdAt: DateTime.parse(json['createdAt']),
@@ -35,6 +41,8 @@ class Activity {
       'userId': userId,
       'user': user,
       'title': title,
+      'points': points,
+      'estimateWeight': estimateWeight,
       'description': description,
       'date': date.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),

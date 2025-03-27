@@ -1,4 +1,8 @@
 import 'dart:convert';
+// import 'package:bin_band_group/models/activity_controller.dart';
+import 'package:bin_band_group/models/redeem_model.dart';
+import 'package:bin_band_group/models/user_model.dart';
+import 'package:bin_band_group/services/storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:bin_band_group/models/schedule_model.dart'; // Ensure this import exists
 import 'package:bin_band_group/models/activity_model.dart'; // Ensure this import exists
@@ -53,7 +57,44 @@ class ApiService {
     return [];
   }
 
-  Future<List<ScheduleModel>> createNewSchedule({
+  Future<List<Redeem>> fetchRedeems() async {
+    final token = await _storageService.getToken(); // Retrieve token
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/reward/listReward'),
+      headers: {'Authorization': 'Bearer $token'}, // Use token
+    );
+    print("===============: ${response.body}");
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Redeem.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load redeems');
+  }
+
+  Future<List<User>> fetchUsers() async {
+    final token = await _storageService.getToken(); // Retrieve token
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/account/user'),
+      headers: {'Authorization': 'Bearer $token'}, // Use token
+    );
+    print("===============: ${response.body}");
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => User.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load redeems');
+  }
+    Future<List<ScheduleModel>> createNewSchedule({
     int limit = 20,
     required String userId,
     required String date,
@@ -65,7 +106,6 @@ class ApiService {
     if (token == null) {
       throw Exception('Token not found');
     }
-
     // Create the request body
     final requestBody = {
       "userId": userId,
@@ -74,7 +114,6 @@ class ApiService {
       "estimateWeight": estimateWeight,
       "recurring": recurring,
     };
-
     final response = await http.post(
       Uri.parse('$baseUrl/api/pickup/schedule?limit=$limit'),
       headers: {
@@ -99,5 +138,4 @@ class ApiService {
       throw Exception('Failed to create schedule');
     }
   }
-  
 }
