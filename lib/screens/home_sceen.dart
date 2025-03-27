@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:bin_band_group/screens/schedule_pickup_screen .dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -74,43 +75,53 @@ class HomeScreen extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // First Container
-                Container(
-                  height: 120,
-                  width: 150,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color(0xFFC2F8D4),
-                    border: Border.all(
-                      color: const Color(0xFF1B5E1F),
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.calendar_month_outlined,
-                        size: 25,
-                        color: Color.fromARGB(255, 43, 109, 45),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "Schedule",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Text("Pickup button"),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 38),
+children: [
+  // First Container
+  GestureDetector(
+    onTap: () {
+      // Navigate to SchedulePickupScreen when the container is tapped
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
+      );
+    },
+    child: Container(
+      height: 120,
+      width: 150,
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: const Color(0xFFC2F8D4),
+        border: Border.all(
+          color: const Color(0xFF1B5E1F),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.calendar_month_outlined,
+            size: 25,
+            color: Color.fromARGB(255, 43, 109, 45),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            "Schedule",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const Text("Pickup button"),
+        ],
+      ),
+    ),
+  ),
+  const SizedBox(width: 38),
+
 
                 // Second Container
                 Container(
