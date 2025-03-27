@@ -1,22 +1,22 @@
-// import '../models/schedule_model.dart';
-// import '../services/api_service.dart';
+import 'package:bin_band_group/services/api_service.dart';
+import 'package:bin_band_group/models/schedule_model.dart';
 
-// class PickupController {
-//   final ApiService _apiService = ApiService();
+class ScheduleController {
+  final ApiService _apiService = ApiService();
 
-//   Future<bool> createPickup({
-//     required String date,
-//     required List<String> wasteTypes,
-//     required double estimateWeight,
-//     required bool recurring,
-//   }) async {
-//     PickupRequest pickup = PickupRequest(
-//       date: date,
-//       wasteTypes: wasteTypes,
-//       estimateWeight: estimateWeight,
-//       recurring: recurring,
-//     );
-
-//     return await _apiService.schedulePickup(pickup);
-//   }
-// }
+  Future<List<ScheduleModel>> createNewSchedule({
+    required String userId,
+    required String date,
+    required List<String> wasteTypes,
+    required double estimateWeight,
+    required bool recurring,
+  }) async {
+    return await _apiService.createNewSchedule(
+      userId: userId,
+      date: date,
+      wasteTypes: wasteTypes.isNotEmpty ? wasteTypes : [],
+      estimateWeight: estimateWeight,
+      recurring: recurring,
+    );
+  }
+}
