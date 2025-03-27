@@ -83,14 +83,14 @@ class HomeContent extends StatelessWidget {
                           MainAxisAlignment.center, // Centers content
                       children: [
                         // Profile Image
-                        ClipOval(
-                          child: Image.network(
-                            state.user.profileImageUrl,
-                            width: 20, // Constrain image size
-                            height: 20,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                        // ClipOval(
+                        //   child: Image.network(
+                        //     state.user.profileImageUrl,
+                        //     width: 20, // Constrain image size
+                        //     height: 20,
+                        //     fit: BoxFit.cover,
+                        //   ),
+                        // ),
                         SizedBox(width: 10), // Space between image and text
                         // Username (Wrap in Flexible to avoid overflow)
                         Flexible(
@@ -119,7 +119,7 @@ class HomeContent extends StatelessWidget {
               );
             },
           ),
-           SizedBox(height: 50), 
+           SizedBox(height: 30), 
 
           Text('Total Points: 100'),
           Text('Total Cash: \$10'),

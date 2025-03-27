@@ -23,6 +23,8 @@ class UserLoaded extends UserState {
   final User user;
 
   UserLoaded(this.user);
+
+  get point => null;
 }
 
 // Bloc to handle user events and manage user states.
@@ -34,4 +36,5 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
   }
 }
+
 

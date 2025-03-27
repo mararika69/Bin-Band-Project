@@ -1,5 +1,6 @@
 import 'dart:convert';
 // import 'package:bin_band_group/models/activity_controller.dart';
+import 'package:bin_band_group/models/point_model.dart';
 import 'package:bin_band_group/models/redeem_model.dart';
 import 'package:bin_band_group/models/user_model.dart';
 import 'package:bin_band_group/services/storage_service.dart';
@@ -137,5 +138,23 @@ class ApiService {
     } else {
       throw Exception('Failed to create schedule');
     }
+  }
+   Future<List<Point>> fetchPoints() async {
+    final token = await _storageService.getToken(); // Retrieve token
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/account/points'),
+      headers: {'Authorization': 'Bearer $token'}, // Use token
+    );
+    print("===============: ${response.body}");
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Point.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load redeems');
   }
 }
