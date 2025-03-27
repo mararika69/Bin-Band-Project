@@ -4,6 +4,7 @@ import 'package:bin_band_group/screens/redeem_points_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bin_band_group/screens/schedule_pickup_screen .dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -194,7 +195,7 @@ class HomeContent extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => RedeemPointsScreen(),
+                      builder: (context) => SchedulePickupScreen(),
                     ),
                   );
                 },

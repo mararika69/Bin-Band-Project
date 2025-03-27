@@ -1,5 +1,5 @@
 import 'package:bin_band_group/controllers/activity_controller.dart';
-import 'package:bin_band_group/models/activity_controller.dart';
+import 'package:bin_band_group/models/activity_model.dart';
 import 'package:flutter/material.dart';
 
 

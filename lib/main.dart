@@ -1,6 +1,7 @@
 import 'package:bin_band_group/bloc/user_bloc.dart';
 import 'package:bin_band_group/screens/home_sceen.dart';
 import 'package:bin_band_group/screens/login_screen.dart';
+import 'package:bin_band_group/screens/schedule_pickup_screen%20.dart';
 import 'package:flutter/material.dart';
 import 'package:bin_band_group/services/storage_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,9 +1,14 @@
 import 'dart:convert';
-import 'package:bin_band_group/models/activity_controller.dart';
+// import 'package:bin_band_group/models/activity_controller.dart';
 import 'package:bin_band_group/models/redeem_model.dart';
 import 'package:bin_band_group/models/user_model.dart';
 import 'package:bin_band_group/services/storage_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:bin_band_group/models/schedule_model.dart'; // Ensure this import exists
+import 'package:bin_band_group/models/activity_model.dart'; // Ensure this import exists
+import 'package:bin_band_group/services/api_service.dart';
+import 'package:bin_band_group/services/storage_service.dart';
+import 'package:bin_band_group/models/user_model.dart';
 
 class ApiService {
   static const String baseUrl = 'https://pay1.jetdev.life';
@@ -88,5 +93,51 @@ class ApiService {
       return data.map((json) => User.fromJson(json)).toList();
     }
     throw Exception('Failed to load redeems');
+  }
+    Future<List<ScheduleModel>> createNewSchedule({
+    int limit = 20,
+    required String userId,
+    required String date,
+    required List<String> wasteTypes,
+    required double estimateWeight,
+    required bool recurring,
+  }) async {
+    final token = await _storageService.getToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    // Create the request body
+    final requestBody = {
+      "userId": userId,
+      "date": date,
+      "wasteTypes": wasteTypes.isNotEmpty ? wasteTypes : [],
+      "estimateWeight": estimateWeight,
+      "recurring": recurring,
+    };
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/pickup/schedule?limit=$limit'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+
+      body: jsonEncode(requestBody), // Encode the body to JSON
+    );
+
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body);
+
+      if (decodedData is List) {
+        return decodedData.map((json) => ScheduleModel.fromJson(json)).toList();
+      } else if (decodedData is Map<String, dynamic>) {
+        return [ScheduleModel.fromJson(decodedData)];
+      } else {
+        throw Exception('Unexpected response format');
+      }
+    } else {
+      throw Exception('Failed to create schedule');
+    }
   }
 }

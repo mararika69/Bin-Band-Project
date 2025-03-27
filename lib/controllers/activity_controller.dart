@@ -1,4 +1,4 @@
-import 'package:bin_band_group/models/activity_controller.dart';
+import 'package:bin_band_group/models/activity_model.dart';
 import 'package:bin_band_group/services/api_service.dart';
 
 class ActivityController {
