@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bin_band_group/models/activity_controller.dart';
+import 'package:bin_band_group/models/redeem_model.dart';
 import 'package:bin_band_group/models/user_model.dart';
 import 'package:bin_band_group/services/storage_service.dart';
 import 'package:http/http.dart' as http;
@@ -49,5 +50,43 @@ class ApiService {
       return data.map((json) => Activity.fromJson(json)).toList();
     }
     return [];
+  }
+
+  Future<List<Redeem>> fetchRedeems() async {
+    final token = await _storageService.getToken(); // Retrieve token
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/reward/listReward'),
+      headers: {'Authorization': 'Bearer $token'}, // Use token
+    );
+    print("===============: ${response.body}");
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Redeem.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load redeems');
+  }
+
+  Future<List<User>> fetchUsers() async {
+    final token = await _storageService.getToken(); // Retrieve token
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/account/user'),
+      headers: {'Authorization': 'Bearer $token'}, // Use token
+    );
+    print("===============: ${response.body}");
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => User.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load redeems');
   }
 }

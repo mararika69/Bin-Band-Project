@@ -1,5 +1,6 @@
 import 'package:bin_band_group/bloc/user_bloc.dart';
 import 'package:bin_band_group/screens/activity_screen.dart';
+import 'package:bin_band_group/screens/redeem_points_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<UserBloc>();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
@@ -35,8 +42,14 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Pickup History'),
-          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Green Social'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Pickup History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group),
+            label: 'Green Social',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,
@@ -54,6 +67,59 @@ class HomeContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              print("Current state: $state"); // Debugging line
+
+              if (state is UserLoaded) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ), // Prevents tight space
+                    child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.center, // Centers content
+                      children: [
+                        // Profile Image
+                        ClipOval(
+                          child: Image.network(
+                            state.user.profileImageUrl,
+                            width: 20, // Constrain image size
+                            height: 20,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(width: 10), // Space between image and text
+                        // Username (Wrap in Flexible to avoid overflow)
+                        Flexible(
+                          child: Text(
+                            'Welcome, ${state.user.userName}!',
+                            style: TextStyle(fontSize: 18),
+                            overflow:
+                                TextOverflow.ellipsis, // Prevents text overflow
+                            maxLines: 1, // Ensures text fits in one line
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else if (state is Error) {
+                return Center(
+                  child: Text(
+                    "Failed to load user data",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                );
+              }
+              return Center(
+                child: CircularProgressIndicator(), // Show loading spinner
+              );
+            },
+          ),
+           SizedBox(height: 50), 
+
           Text('Total Points: 100'),
           Text('Total Cash: \$10'),
 
@@ -119,9 +185,35 @@ class HomeContent extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              QuickActionCard(icon: Icons.calendar_month_outlined, title: "Schedule", subtitle: "Pickup button", color: Color(0xFFC2F8D4)),
+              QuickActionCard(
+                icon: Icons.calendar_month_outlined,
+                title: "Schedule",
+                subtitle: "Pickup button",
+                color: Color(0xFFC2F8D4),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RedeemPointsScreen(),
+                    ),
+                  );
+                },
+              ),
               SizedBox(width: 16),
-              QuickActionCard(icon: Icons.wallet_giftcard, title: "Redeem", subtitle: "Points button", color: Color(0xFFFFEFBC)),
+              QuickActionCard(
+                icon: Icons.wallet_giftcard,
+                title: "Redeem",
+                subtitle: "Points button",
+                color: Color(0xFFFFEFBC),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RedeemPointsScreen(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
 
@@ -152,26 +244,6 @@ class HomeContent extends StatelessWidget {
           RecentActivityCard(),
 
           const SizedBox(height: 20),
-
-          BlocBuilder<UserBloc, UserState>(
-            builder: (context, state) {
-              if (state is UserLoaded) {
-                final user = state.user;
-                return Center(
-                  child: Column(
-                    children: [
-                      Text('Welcome, ${user.userName}!'),
-                      Text('Email: ${user.email}'),
-                    ],
-                  ),
-                );
-              } else if (state is Error) {
-                return Center(child: Text("Failed to load user data", style: TextStyle(color: Colors.red)));
-              }
-              // No loading state is shown here, return an empty widget
-              return SizedBox.shrink();  // Empty widget to avoid showing anything if state is not loaded or error
-            },
-          ),
         ],
       ),
     );
@@ -184,28 +256,46 @@ class QuickActionCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final Color color;
+  final VoidCallback onTap; // Added onTap parameter
 
-  QuickActionCard({required this.icon, required this.title, required this.subtitle, required this.color});
+  QuickActionCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    required this.onTap, // Include onTap in constructor
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      width: 150,
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: color,
-        border: Border.all(color: Colors.black, width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 25, color: Colors.green),
-          SizedBox(height: 8),
-          Text(title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black)),
-          Text(subtitle),
-        ],
+    return GestureDetector(
+      // Wrap the entire card in GestureDetector to handle onTap
+      onTap: onTap, // Use onTap here
+      child: Container(
+        height: 120,
+        width: 150,
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: color,
+          border: Border.all(color: Colors.black, width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 25, color: Colors.green),
+            SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            Text(subtitle),
+          ],
+        ),
       ),
     );
   }
@@ -251,18 +341,34 @@ class RecentActivityCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Plastic Collection", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text(
+                    "Plastic Collection",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(height: 5),
-                  Text("3.5 kg", style: TextStyle(fontSize: 12, color: Colors.black)),
+                  Text(
+                    "3.5 kg",
+                    style: TextStyle(fontSize: 12, color: Colors.black),
+                  ),
                 ],
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("+ 7 Points", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.green)),
+                Text(
+                  "+ 7 Points",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
                 SizedBox(height: 5),
-                Text("2 hours ago", style: TextStyle(fontSize: 12, color: Colors.black)),
+                Text(
+                  "2 hours ago",
+                  style: TextStyle(fontSize: 12, color: Colors.black),
+                ),
               ],
             ),
           ],

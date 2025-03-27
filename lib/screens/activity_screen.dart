@@ -76,12 +76,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                activity.title,
+                                '${activity.title}',
                                 style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                activity.description,
+                                '${activity.estimateWeight} kg',
                                 style: const TextStyle(fontSize: 12, color: Colors.black),
                               ),
                             ],
@@ -92,12 +92,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '+ ${activity.points} Points',
+                              '${activity.points}',
                               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.green),
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              '${activity.date} ago',
+                              '${activity.date}',
                               style: const TextStyle(fontSize: 12, color: Colors.black),
                             ),
                           ],
